@@ -197,6 +197,64 @@ export const deleteUser = async (id) => {
   })
 }
 
+export const updateUser = async (userId, updates) => {
+  const db = await initializeDB()
+  return new Promise(async (resolve, reject) => {
+    const transaction = db.transaction([USERS_STORE], "readwrite")
+    const store = transaction.objectStore(USERS_STORE)
+    const getRequest = store.get(userId)
+
+    getRequest.onsuccess = () => {
+      const user = getRequest.result
+      if (user) {
+        const updatedUser = { ...user, ...updates }
+        const putRequest = store.put(updatedUser)
+        putRequest.onsuccess = () => resolve(updatedUser)
+        putRequest.onerror = () => reject(putRequest.error)
+      } else {
+        reject(new Error("User not found"))
+      }
+    }
+
+    getRequest.onerror = () => reject(getRequest.error)
+  })
+}
+
+export const getUserById = async (userId) => {
+  const db = await initializeDB()
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction([USERS_STORE], "readonly")
+    const store = transaction.objectStore(USERS_STORE)
+    const request = store.get(userId)
+
+    request.onsuccess = () => resolve(request.result)
+    request.onerror = () => reject(request.error)
+  })
+}
+
+export const updateResource = async (resourceId, updates) => {
+  const db = await initializeDB()
+  return new Promise(async (resolve, reject) => {
+    const transaction = db.transaction([RESOURCES_STORE], "readwrite")
+    const store = transaction.objectStore(RESOURCES_STORE)
+    const getRequest = store.get(resourceId)
+
+    getRequest.onsuccess = () => {
+      const resource = getRequest.result
+      if (resource) {
+        const updatedResource = { ...resource, ...updates }
+        const putRequest = store.put(updatedResource)
+        putRequest.onsuccess = () => resolve(updatedResource)
+        putRequest.onerror = () => reject(putRequest.error)
+      } else {
+        reject(new Error("Resource not found"))
+      }
+    }
+
+    getRequest.onerror = () => reject(getRequest.error)
+  })
+}
+
 export const clearAllData = async () => {
   const db = await initializeDB()
   return new Promise((resolve, reject) => {

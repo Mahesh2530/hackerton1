@@ -14,11 +14,72 @@ export function CreateAccountPage({ onSignUp, onBackToLogin }) {
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [institution, setInstitution] = useState("")
+  const [phoneNumber, setPhoneNumber] = useState("")
   const [loading, setLoading] = useState(false)
+  const [nameError, setNameError] = useState("")
+  const [phoneError, setPhoneError] = useState("")
+
+  const handleNameChange = (e) => {
+    const value = e.target.value
+    // Only allow alphabets and spaces
+    const alphabetOnly = /^[a-zA-Z\s]*$/
+    
+    if (alphabetOnly.test(value) || value === "") {
+      setName(value)
+      setNameError("")
+    } else {
+      setNameError("Name can only contain letters and spaces")
+    }
+  }
+
+  const handlePhoneChange = (e) => {
+    const value = e.target.value
+    // Only allow numbers and limit to 10 digits
+    const numbersOnly = /^[0-9]*$/
+    
+    if (numbersOnly.test(value)) {
+      if (value.length <= 10) {
+        setPhoneNumber(value)
+        if (value.length === 10) {
+          setPhoneError("")
+        } else if (value.length > 0) {
+          setPhoneError("Phone number must be exactly 10 digits")
+        } else {
+          setPhoneError("")
+        }
+      }
+    } else {
+      setPhoneError("Phone number can only contain numbers")
+    }
+  }
 
   const handleSignUp = async () => {
-    if (!name.trim() || !email.trim() || !password.trim() || !confirmPassword.trim() || !institution.trim()) {
+    if (!name.trim() || !email.trim() || !password.trim() || !confirmPassword.trim() || !institution.trim() || !phoneNumber.trim()) {
       alert("Please fill all fields")
+      return
+    }
+
+    // Validate email contains @ character
+    if (!email.includes('@')) {
+      alert("Email must contain @ character")
+      return
+    }
+
+    // Validate name contains only alphabets
+    if (!/^[a-zA-Z\s]+$/.test(name)) {
+      alert("Name can only contain letters and spaces")
+      return
+    }
+
+    // Validate phone number is exactly 10 digits
+    if (phoneNumber.length !== 10 || !/^[0-9]{10}$/.test(phoneNumber)) {
+      alert("Phone number must be exactly 10 digits")
+      return
+    }
+
+    // Validate password has at least 1 character
+    if (password.length < 1) {
+      alert("Password must contain at least 1 character")
       return
     }
 
@@ -47,7 +108,10 @@ export function CreateAccountPage({ onSignUp, onBackToLogin }) {
         password,
         role: userType,
         institution,
+        phoneNumber,
         createdAt: new Date().toISOString(),
+        isBlocked: false,
+        oneStarCount: 0,
       }
 
       await addUser(newUser)
@@ -63,11 +127,11 @@ export function CreateAccountPage({ onSignUp, onBackToLogin }) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-400 via-black to-yellow-600 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md shadow-2xl border-4 border-yellow-400">
+    <div className="min-h-screen bg-gradient-to-br from-yellow-400 via-black to-yellow-600 flex items-center justify-center p-4 animate-[fadeIn_0.5s_ease-out]">
+      <Card className="w-full max-w-md shadow-2xl border-4 border-yellow-400 animate-[scaleIn_0.6s_ease-out] hover:scale-105 transition-transform duration-300">
         <CardHeader className="space-y-2 text-center bg-gradient-to-r from-yellow-500 via-black to-yellow-500">
           <div className="flex justify-center mb-4">
-            <div className="bg-yellow-400 p-3 rounded-lg shadow-lg">
+            <div className="bg-yellow-400 p-3 rounded-lg shadow-lg animate-[bounce_2s_ease-in-out_infinite] hover:rotate-12 transition-transform duration-300">
               <BookOpen className="w-8 h-8 text-black" />
             </div>
           </div>
@@ -78,11 +142,11 @@ export function CreateAccountPage({ onSignUp, onBackToLogin }) {
         <CardContent className="space-y-6 pt-8 bg-gradient-to-b from-black to-yellow-900">
           {!userType ? (
             <div className="space-y-3">
-              <p className="text-sm font-bold text-center text-yellow-200">Sign up as:</p>
+              <p className="text-sm font-bold text-center text-yellow-200 animate-[fadeIn_0.8s_ease-out]">Sign up as:</p>
               <Button
                 onClick={() => setUserType("admin")}
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold text-base h-12 shadow-lg transform hover:scale-105 transition disabled:opacity-50"
+                className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold text-base h-12 shadow-lg transform hover:scale-110 hover:shadow-2xl transition-all duration-300 animate-[slideInLeft_1s_ease-out] disabled:opacity-50"
                 size="lg"
               >
                 Admin
@@ -123,13 +187,16 @@ export function CreateAccountPage({ onSignUp, onBackToLogin }) {
                 </Button>
               </div>
 
-              <Input
-                placeholder="Full Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                disabled={loading}
-                className="border-2 border-yellow-400 focus:border-yellow-300 font-semibold bg-black text-yellow-100 placeholder-yellow-600"
-              />
+              <div>
+                <Input
+                  placeholder="Full Name (letters only)"
+                  value={name}
+                  onChange={handleNameChange}
+                  disabled={loading}
+                  className="border-2 border-yellow-400 focus:border-yellow-300 font-semibold bg-black text-yellow-100 placeholder-yellow-600"
+                />
+                {nameError && <p className="text-red-400 text-xs mt-1 font-semibold">{nameError}</p>}
+              </div>
               <Input
                 placeholder="Email Address"
                 type="email"
@@ -145,6 +212,17 @@ export function CreateAccountPage({ onSignUp, onBackToLogin }) {
                 disabled={loading}
                 className="border-2 border-yellow-400 focus:border-yellow-300 font-semibold bg-black text-yellow-100 placeholder-yellow-600"
               />
+              <div>
+                <Input
+                  placeholder="Phone Number (10 digits)"
+                  value={phoneNumber}
+                  onChange={handlePhoneChange}
+                  disabled={loading}
+                  maxLength={10}
+                  className="border-2 border-yellow-400 focus:border-yellow-300 font-semibold bg-black text-yellow-100 placeholder-yellow-600"
+                />
+                {phoneError && <p className="text-red-400 text-xs mt-1 font-semibold">{phoneError}</p>}
+              </div>
               <Input
                 placeholder="Password"
                 type="password"

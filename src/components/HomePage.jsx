@@ -7,13 +7,13 @@ export function HomePage({ onGetStarted }) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-green-50 to-red-50">
       {/* Header */}
-      <header className="bg-gradient-to-r from-yellow-400 via-green-400 to-red-400 shadow-2xl border-b-4 border-red-500">
+      <header className="bg-gradient-to-r from-yellow-400 via-green-400 to-red-400 shadow-2xl border-b-4 border-red-500 animate-[fadeInDown_0.6s_ease-out]">
         <div className="max-w-6xl mx-auto px-4 py-8 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="bg-red-600 p-3 rounded-lg shadow-lg transform hover:scale-110 transition">
+            <div className="bg-red-600 p-3 rounded-lg shadow-lg transform hover:scale-110 hover:rotate-6 transition-all duration-300 animate-[pulse_2s_ease-in-out_infinite]">
               <BookOpen className="w-8 h-8 text-white" />
             </div>
-            <div>
+            <div className="animate-[slideInLeft_0.8s_ease-out]">
               <h1 className="text-3xl font-bold text-gray-900">Edulibrary</h1>
               <p className="text-gray-800 font-semibold">Educational Resource Management System</p>
             </div>
@@ -24,15 +24,15 @@ export function HomePage({ onGetStarted }) {
       {/* Hero Section */}
       <section className="max-w-6xl mx-auto px-4 py-16">
         <div className="text-center mb-16">
-          <h2 className="text-5xl font-bold bg-gradient-to-r from-yellow-600 via-green-600 to-red-600 bg-clip-text text-transparent mb-4">
+          <h2 className="text-5xl font-bold bg-gradient-to-r from-yellow-600 via-green-600 to-red-600 bg-clip-text text-transparent mb-4 animate-[fadeIn_1s_ease-out] hover:scale-105 transition-transform duration-300">
             Welcome to Edulibrary
           </h2>
-          <p className="text-xl text-gray-700 font-semibold mb-8">
+          <p className="text-xl text-gray-700 font-semibold mb-8 animate-[fadeIn_1.2s_ease-out]">
             Access thousands of educational resources organized and managed for your learning journey
           </p>
           <Button
             onClick={onGetStarted}
-            className="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-gray-900 font-bold px-10 py-4 text-lg shadow-lg transform hover:scale-105 transition"
+            className="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-gray-900 font-bold px-10 py-4 text-lg shadow-lg transform hover:scale-110 hover:shadow-2xl transition-all duration-300 animate-[bounceIn_1.4s_ease-out]"
           >
             Get Started
           </Button>
@@ -41,7 +41,7 @@ export function HomePage({ onGetStarted }) {
         {/* Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* For Admins */}
-          <div className="bg-white rounded-xl shadow-xl p-8 border-4 border-red-500 transform hover:scale-105 transition">
+          <div className="bg-white rounded-xl shadow-xl p-8 border-4 border-red-500 transform hover:scale-105 hover:-translate-y-2 hover:shadow-2xl transition-all duration-500 animate-[fadeInUp_0.8s_ease-out]">
             <div className="bg-red-100 w-16 h-16 rounded-lg flex items-center justify-center mb-4 shadow-lg">
               <Upload className="w-8 h-8 text-red-600" />
             </div>
@@ -66,7 +66,7 @@ export function HomePage({ onGetStarted }) {
           </div>
 
           {/* For Students */}
-          <div className="bg-white rounded-xl shadow-xl p-8 border-4 border-green-500 transform hover:scale-105 transition">
+          <div className="bg-white rounded-xl shadow-xl p-8 border-4 border-green-500 transform hover:scale-105 hover:-translate-y-2 hover:shadow-2xl transition-all duration-500 animate-[fadeInUp_1s_ease-out]">
             <div className="bg-green-100 w-16 h-16 rounded-lg flex items-center justify-center mb-4 shadow-lg">
               <Search className="w-8 h-8 text-green-600" />
             </div>
@@ -91,7 +91,7 @@ export function HomePage({ onGetStarted }) {
           </div>
 
           {/* Statistics */}
-          <div className="bg-white rounded-xl shadow-xl p-8 border-4 border-yellow-500 transform hover:scale-105 transition">
+          <div className="bg-white rounded-xl shadow-xl p-8 border-4 border-yellow-500 transform hover:scale-105 hover:-translate-y-2 hover:shadow-2xl transition-all duration-500 animate-[fadeInUp_1.2s_ease-out]">
             <div className="bg-yellow-100 w-16 h-16 rounded-lg flex items-center justify-center mb-4 shadow-lg">
               <Users className="w-8 h-8 text-yellow-600" />
             </div>
